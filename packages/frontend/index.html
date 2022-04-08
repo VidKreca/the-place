@@ -5,8 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>the-place</title>
+
 </head>
 <body>
-    
+    <button id="sendButton">Send</button>
+
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
+        const socket = io("http://localhost:3000");
+
+        socket.on("connect", () => {
+            console.log("Connected");
+        });
+        socket.on("disconnect", () => {
+            console.log("Disconnected");
+        });
+        
+        socket.on("reply", (msg) => {
+            console.log("msg");
+        });
+
+        function send() {
+            console.log("sending message...")
+            socket.emit("echo", "Hello world", (data) => console.log(data));
+        }
+
+        document.querySelector("#sendButton").addEventListener("click", () => {
+            send();
+        });
+    </script>
 </body>
 </html>
