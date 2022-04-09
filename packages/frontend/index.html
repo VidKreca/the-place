@@ -6,29 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>the-place</title>
 
+    <style>
+        body {
+            background-color: gray;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #canvas {
+            width: 50%;
+            height: 50%;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-    <button id="sendButton">Send</button>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+        <button id="sendButton">Send</button>
+    </div>
+
 
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 
         const socket = io("http://localhost:3000");
+        const canvas = document.querySelector("#canvas");
+        const context = canvas.getContext("2d");
 
         socket.on("connect", () => {
-            console.log("Connected");
+            console.log("%cConnected", "color: green");
         });
         socket.on("disconnect", () => {
-            console.log("Disconnected");
+            console.log("%cDisconnected", "color: red");
+        });
+
+        socket.on("resize", (msg) => {
+            console.log("%cReceived resize message: ", "color: gray", msg);
+
+            const {width, height} = msg;
+            canvas.width = width;
+            canvas.height = height;
         });
         
-        socket.on("reply", (msg) => {
-            console.log("msg");
+        socket.on("update", (msg) => {
+            console.log("%cUPDATE: ", "color: blue", msg);
+
+            updateCanvas(msg);
         });
 
         function send() {
-            console.log("sending message...")
-            socket.emit("echo", "Hello world", (data) => console.log(data));
+            console.log("%cSending message...", "color: gray");
+
+            const randomColorValue = () => Math.random() * 255;
+            const randomColor = () => {return {r: randomColorValue(), g: randomColorValue(), b: randomColorValue()}};
+            const data = {x: 0, y: 0, color: randomColor()};
+
+            updateCanvas(data);
+
+            socket.emit("place", data);
+        }
+
+        function updateCanvas(update) {
+            const {x, y, color: {r, g, b}} = update;
+            context.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            context.fillRect(x, y, 1, 1);
         }
 
         document.querySelector("#sendButton").addEventListener("click", () => {
