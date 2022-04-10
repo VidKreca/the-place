@@ -14,10 +14,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100vh;
         }
         #canvas {
             width: 50%;
-            height: 50%;
             border: 1px solid black;
         }
     </style>
@@ -35,6 +35,7 @@
         const socket = io("http://localhost:3000");
         const canvas = document.querySelector("#canvas");
         const context = canvas.getContext("2d");
+        let image;
 
         socket.on("connect", () => {
             console.log("%cConnected", "color: green");
@@ -49,6 +50,8 @@
             const {width, height} = msg;
             canvas.width = width;
             canvas.height = height;
+
+            image = context.createImageData(width, height);
         });
         
         socket.on("update", (msg) => {
@@ -57,12 +60,8 @@
             updateCanvas(msg);
         });
 
-        function send() {
+        function send(data) {
             console.log("%cSending message...", "color: gray");
-
-            const randomColorValue = () => Math.random() * 255;
-            const randomColor = () => {return {r: randomColorValue(), g: randomColorValue(), b: randomColorValue()}};
-            const data = {x: 0, y: 0, color: randomColor()};
 
             updateCanvas(data);
 
@@ -70,14 +69,42 @@
         }
 
         function updateCanvas(update) {
+            if (!image) console.err("Have not received a 'resize' event yet.");
+
+            context.imageSmoothingEnabled = false;
+            context.mozImageSmoothingEnabled = false;
+            context.webkitImageSmoothingEnabled = false;
+            context.msImageSmoothingEnabled = false;
+            console.log(context.imageSmoothingEnabled)
+
             const {x, y, color: {r, g, b}} = update;
-            context.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            context.fillRect(x, y, 1, 1);
+
+            const pixelIndex = (y * canvas.width * 4) + (x * 4);
+
+            image.data[pixelIndex + 0] = r;
+            image.data[pixelIndex + 1] = g;
+            image.data[pixelIndex + 2] = b;
+            image.data[pixelIndex + 3] = 255;
+
+            context.putImageData(image, 0, 0);
+        }
+
+        function clickEventHandler(event) {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((event.clientX - rect.left) / (rect.width / canvas.width));
+            const y = Math.floor((event.clientY - rect.top) / (rect.height / canvas.height));
+
+            const randomColorValue = () => Math.random() * 255;
+            const randomColor = () => {return {r: randomColorValue(), g: randomColorValue(), b: randomColorValue()}};
+            const data = {x, y, color: randomColor()};
+
+            send(data);
         }
 
         document.querySelector("#sendButton").addEventListener("click", () => {
             send();
         });
+        canvas.addEventListener("mousedown", clickEventHandler);
     </script>
 </body>
 </html>

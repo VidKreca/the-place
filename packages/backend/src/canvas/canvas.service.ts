@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Color, DrawMessage } from '../interfaces/Messages';
 
-const DIMENSIONS = { width: 10, height: 10 };
+const DIMENSIONS = { width: 100, height: 100 };
 
 @Injectable()
 export class CanvasService {
