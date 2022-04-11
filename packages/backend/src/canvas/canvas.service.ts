@@ -24,4 +24,8 @@ export class CanvasService {
   getConfig() {
     return { width: DIMENSIONS.width, height: DIMENSIONS.height };
   }
+
+  getCanvas() {
+    return this.canvas;
+  }
 }

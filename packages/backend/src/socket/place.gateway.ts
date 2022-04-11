@@ -15,9 +15,10 @@ export class PlaceGateway implements OnGatewayConnection {
   handleConnection(@ConnectedSocket() socket) {
     console.log('%cNew client connected', 'color: gray');
 
-    const message = this.canvasService.getConfig();
-
-    socket.emit('resize', message);
+    const config = this.canvasService.getConfig();
+    const image = this.canvasService.getCanvas();
+    const message = { ...config, image };
+    socket.emit('initial', message);
   }
 
   @SubscribeMessage('place')

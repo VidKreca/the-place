@@ -44,14 +44,33 @@
             console.log("%cDisconnected", "color: red");
         });
 
-        socket.on("resize", (msg) => {
-            console.log("%cReceived resize message: ", "color: gray", msg);
+        socket.on("initial", (msg) => {
+            console.log("%cReceived 'initial' message: ", "color: gray", msg);
+            console.time("init");
 
-            const {width, height} = msg;
+            const {width, height, image: currentImage} = msg;
             canvas.width = width;
             canvas.height = height;
 
             image = context.createImageData(width, height);
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (currentImage[x][y] === null) {
+                        continue;
+                    }
+
+                    const index = (y * width * 4) + (x * 4);
+                    image.data[index + 0] = currentImage[x][y].r;
+                    image.data[index + 1] = currentImage[x][y].g;
+                    image.data[index + 2] = currentImage[x][y].b;
+                    image.data[index + 3] = 255;
+                }
+            }
+            console.timeEnd("init");
+
+            // Draw current picture on canvas
+            context.putImageData(image, 0, 0);
         });
         
         socket.on("update", (msg) => {
@@ -69,13 +88,12 @@
         }
 
         function updateCanvas(update) {
-            if (!image) console.err("Have not received a 'resize' event yet.");
+            if (!image) console.error("Have not received a 'initial' event yet.");
 
             context.imageSmoothingEnabled = false;
             context.mozImageSmoothingEnabled = false;
             context.webkitImageSmoothingEnabled = false;
             context.msImageSmoothingEnabled = false;
-            console.log(context.imageSmoothingEnabled)
 
             const {x, y, color: {r, g, b}} = update;
 
