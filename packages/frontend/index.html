@@ -31,7 +31,7 @@
     <script type="module">
         import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 
-        const socket = io("http://localhost:3000");
+        const socket = io("http://192.168.0.14:3000");
         const canvas = document.querySelector("#canvas");
         const context = canvas.getContext("2d");
         let image;
@@ -79,8 +79,6 @@
 
         function send(data) {
             console.log("%cSending message...", "color: gray");
-
-            updateCanvas(data);
 
             socket.emit("place", data);
         }
