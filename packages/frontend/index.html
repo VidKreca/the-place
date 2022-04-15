@@ -8,8 +8,8 @@
     <title>the-place</title>
 </head>
 <body>
-    <div class="container" v-scope>
-        <canvas id="canvas"></canvas>
+    <div class="container" v-scope @vue:mounted="mounted">
+        <canvas id="canvas" v-on:click="onCanvasClick"></canvas>
         <div class="statusContainer">
             <span>{{timeout}}</span>
             <button v-on:click="setTimeout(5)">start timeout</button>
