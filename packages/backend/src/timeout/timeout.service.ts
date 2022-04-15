@@ -12,6 +12,10 @@ const TIMEOUT = 3 * 1000; // Minimum delay between allowed draws in milliseconds
 export class TimeoutService {
   timeouts: Identifier[] = [];
 
+  get timeoutDuration() {
+    return TIMEOUT / 1000;
+  }
+
   isTimedOut(identifier: Identifier): boolean {
     // Remove expired timeouts
     this.timeouts = this.timeouts.filter(

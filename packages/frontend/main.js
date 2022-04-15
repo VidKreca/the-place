@@ -53,7 +53,7 @@ createApp({
     console.log("%cSending message...", "color: gray");
     this.socket.emit("place", data);
 
-    if (this.timeout <= 0 && this.timeoutDuration) {
+    if ((!this.timeout || this.timeout <= 0) && this.timeoutDuration) {
       this.setTimeout(this.timeoutDuration);
     }
   },

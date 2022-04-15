@@ -23,9 +23,10 @@ export class PlaceGateway implements OnGatewayConnection {
   handleConnection(@ConnectedSocket() socket) {
     console.log('%cNew client connected', 'color: gray');
 
-    const config = this.canvasService.getConfig();
+    const canvasConfig = this.canvasService.getConfig();
+    const timeoutDuration = this.timeoutService.timeoutDuration;
     const image = this.canvasService.getCanvas();
-    const message = { ...config, image };
+    const message = { ...canvasConfig, image, timeoutDuration };
     socket.emit('initial', message);
   }
 
