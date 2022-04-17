@@ -14,6 +14,7 @@ This is a copy of [Reddit's april fools mini game called 'The place'](https://en
 
 ## Planned features
 - [ ] Saving the entire canvas (with all updates) in a database
-- [ ] System for updating canvas size, timeout length and colors live
+- [x] System for updating canvas size, timeout length and colors live
 - [ ] Zooming and panning support for the canvas
 - [ ] Pixel highlight on mouse hover 
+- [ ] Admin users (no timeout when placing pixels)
