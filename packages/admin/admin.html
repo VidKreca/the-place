@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>The place - Admin panel</title>
+</head>
+<body>
+  
+  <div class="container" v-scope>
+    <div class="auth">
+      <input type="text" v-model="token" placeholder="Admin token">
+      <button @click="authorize">Authorize</button>
+      <div id="authStatus" :class="{authed: authorized}"><span></span>{{authStatusText}}</div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js" defer></script>
+
+</body>
+</html>

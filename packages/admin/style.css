@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+.container {
+  
+}
+
+.auth {
+
+}
+.auth #authStatus {
+  display: flex;
+  gap: .3em;
+}
+.auth #authStatus span {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: red;
+  border-radius: 1em;
+}
+.auth #authStatus.authed span {
+  background-color: green;
+}
