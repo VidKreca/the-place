@@ -24,3 +24,11 @@
 .auth #authStatus.authed span {
   background-color: green;
 }
+
+
+.colors span {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  border: 1px solid black;
+}

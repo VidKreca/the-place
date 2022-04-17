@@ -15,6 +15,39 @@
       <button @click="authorize">Authorize</button>
       <div id="authStatus" :class="{authed: authorized}"><span></span>{{authStatusText}}</div>
     </div>
+
+    <div class="form" v-if="authorized && config">
+      <div class="size">
+        <label for="width">Width</label>
+        <input id="width" type="number" v-model="config.width" placeholder="width">
+        <label for="height">Height</label>
+        <input id="height" type="number" v-model="config.height" placeholder="height">
+      </div>
+
+      <div class="timeout">
+        <label for="timeoutDuration">Timeout duration (seconds)</label>
+        <input id="timeoutDuration" type="number" v-model="config.timeoutDuration" placeholder="Timeout duration (seconds)">
+      </div>
+
+      <div class="colors">
+        <span v-for="color, index in config.colors" @click="onColorClick(index)" :style="{'background-color': getRgb(color)}"></span>
+        <div class="colorForm" :style="{'background-color': getRgb([color.r, color.g, color.b])}">
+          <input type="number" placeholder="red" v-model="color.r" max="255" min="0">
+          <input type="number" placeholder="green" v-model="color.g" max="255" min="0">
+          <input type="number" placeholder="blue" v-model="color.b" max="255" min="0">
+          <button @click="addColor()">+</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button @click="toggleAction('clear')">Clear canvas</button>
+        <div>
+          <span v-for="action in actions">{{action}}</span>
+        </div>
+      </div>
+
+      <button @click="save()">Save</button>
+    </div>
   </div>
 
   <script type="module" src="main.js" defer></script>
