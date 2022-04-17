@@ -10,10 +10,11 @@ createApp({
     leftDown: false,
     offsetX: 0,
     offsetY: 0,
-    scroll: 0,
-    SPEED: 0.2,
+    scroll: 1,
+    SPEED: 0.5,
     MAX: 0.8,
-    MAX_SCROLL: 0.1
+    MAX_ZOOM: 3,
+    MIN_ZOOM: 0.1
   },
 
 
@@ -105,6 +106,9 @@ createApp({
   drawImage() {
     requestAnimationFrame(() => {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      // this.context.scale(this.mouse.scroll, this.mouse.scroll);
+      // createImageBitmap(this.image).then(image => this.context.drawImage(image, this.mouse.offsetX, this.mouse.offsetY))
       this.context.putImageData(this.image, this.mouse.offsetX, this.mouse.offsetY);
     });
   },
@@ -122,8 +126,10 @@ createApp({
     if (this.timeout > 0) return;
 
     const rect = this.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (rect.width / this.canvas.width));
-    const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height));
+    const x = Math.floor((e.clientX - rect.left) / (rect.width / this.canvas.width) - this.mouse.offsetX);
+    const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height) - this.mouse.offsetY);
+    if (x < 0 || x >= this.canvas.width) return;
+    if (y < 0 || y >= this.canvas.height) return;
 
     const color = this.colors[this.selectedColorIndex];
     if (JSON.stringify(color) === JSON.stringify(this.getPixelColor(x, y))) return;   // Do not allow drawing over a pixel with the same color (wasting a draw)
@@ -141,6 +147,7 @@ createApp({
       this.mouse.offsetX += movementX * this.mouse.SPEED;
       this.mouse.offsetY += movementY * this.mouse.SPEED;
 
+      // Limits
       this.mouse.offsetX = Math.min(this.mouse.offsetX, this.canvas.width * this.mouse.MAX);
       this.mouse.offsetX = Math.max(this.mouse.offsetX, -(this.canvas.width * this.mouse.MAX));
       this.mouse.offsetY = Math.min(this.mouse.offsetY, this.canvas.height * this.mouse.MAX);
@@ -155,8 +162,8 @@ createApp({
 
     this.mouse.scroll += delta / 1000;
 
-    this.mouse.scroll = Math.min(this.mouse.scroll, this.mouse.MAX_SCROLL);
-    this.mouse.scroll = Math.max(this.mouse.scroll, -this.mouse.MAX_SCROLL);
+    this.mouse.scroll = Math.min(this.mouse.scroll, this.mouse.MAX_ZOOM);
+    this.mouse.scroll = Math.max(this.mouse.scroll, -this.mouse.MIN_ZOOM);
 
     this.drawImage();
   },
