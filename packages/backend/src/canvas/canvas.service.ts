@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DrawMessage } from '../interfaces/Messages';
 
-const DIMENSIONS = { width: 100, height: 100 };
-
 @Injectable()
 export class CanvasService {
   private canvas: number[][][];
   private history: DrawMessage[] = [];
+  private dimensions = { width: 100, height: 100 };
   private colors: number[][] = [
     [0, 0, 0],
     [255, 255, 255],
@@ -17,17 +16,21 @@ export class CanvasService {
 
   constructor() {
     // Create 2D array for colors
-    this.canvas = new Array(DIMENSIONS.width);
+    this.generateCanvas();
+  }
+
+  generateCanvas(color = [255, 255, 255]) {
+    this.canvas = new Array(this.dimensions.width);
     for (let i = 0; i < this.canvas.length; i++) {
-      this.canvas[i] = new Array(DIMENSIONS.height).fill([255, 255, 255]);
+      this.canvas[i] = new Array(this.dimensions.height).fill(color);
     }
   }
 
   place(data: DrawMessage): boolean {
     if (!this.isValidColor(data.color)) return false;
 
-    if (data.x < 0 || data.x > DIMENSIONS.width - 1) return false;
-    if (data.y < 0 || data.y > DIMENSIONS.height - 1) return false;
+    if (data.x < 0 || data.x > this.dimensions.width - 1) return false;
+    if (data.y < 0 || data.y > this.dimensions.height - 1) return false;
 
     this.canvas[data.x][data.y] = data.color;
     this.history.push(data);
@@ -44,8 +47,8 @@ export class CanvasService {
 
   getConfig() {
     return {
-      width: DIMENSIONS.width,
-      height: DIMENSIONS.height,
+      width: this.dimensions.width,
+      height: this.dimensions.height,
       colors: this.colors,
     };
   }
@@ -59,6 +62,6 @@ export class CanvasService {
   }
 
   clearCanvas() {
-    console.log('%cClearing canvas is not implemented yet.', 'color: red');
+    this.generateCanvas();
   }
 }
