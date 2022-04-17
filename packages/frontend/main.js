@@ -29,14 +29,17 @@ createApp({
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          if (currentImage[x][y] === null) {
-            continue;
+          let r, g, b;
+          if (!currentImage[x][y]) {
+            [r, g, b] = [255, 255, 255];  // Default pixel color is white
+          } else {
+            [r, g, b] = currentImage[x][y];
           }
 
           const index = (y * width * 4) + (x * 4);
-          this.image.data[index + 0] = currentImage[x][y].r;
-          this.image.data[index + 1] = currentImage[x][y].g;
-          this.image.data[index + 2] = currentImage[x][y].b;
+          this.image.data[index + 0] = r;
+          this.image.data[index + 1] = g;
+          this.image.data[index + 2] = b;
           this.image.data[index + 3] = 255;
         }
       }
@@ -82,7 +85,7 @@ createApp({
 
     this.context.imageSmoothingEnabled = false;
 
-    const { x, y, color: { r, g, b } } = update;
+    const { x, y, color: [ r, g, b ] } = update;
 
     const pixelIndex = (y * this.canvas.width * 4) + (x * 4);
 
@@ -100,7 +103,7 @@ createApp({
     const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height));
 
     const randomColorValue = () => Math.random() * 255;
-    const randomColor = () => { return { r: randomColorValue(), g: randomColorValue(), b: randomColorValue() } };
+    const randomColor = () => [ randomColorValue(), randomColorValue(), randomColorValue() ];
     const data = { x, y, color: randomColor() };
 
     this.send(data);

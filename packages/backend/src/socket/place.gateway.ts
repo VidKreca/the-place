@@ -44,8 +44,8 @@ export class PlaceGateway implements OnGatewayConnection {
       return;
     }
 
-    this.canvasService.place(data);
-    this.server.sockets.emit('update', data);
+    const valid = this.canvasService.place(data);
+    if (valid) this.server.sockets.emit('update', data);
     this.timeoutService.add(identifier);
   }
 }

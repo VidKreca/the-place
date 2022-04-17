@@ -12,13 +12,17 @@ export class CanvasService {
     // Create 2D array for colors
     this.canvas = new Array(DIMENSIONS.width);
     for (let i = 0; i < this.canvas.length; i++) {
-      this.canvas[i] = new Array(DIMENSIONS.height);
+      this.canvas[i] = new Array(DIMENSIONS.height).fill([255, 255, 255]);
     }
   }
 
-  place(data: DrawMessage) {
+  place(data: DrawMessage): boolean {
+    if (!Array.isArray(data.color) || data.color.length !== 3) return false;
+
     this.canvas[data.x][data.y] = data.color;
     this.history.push(data);
+
+    return true;
   }
 
   getConfig() {
