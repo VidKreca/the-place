@@ -8,9 +8,11 @@ createApp({
     return this.authorized ? "Authorized" : "Unauthorized";
   },
 
-  authorize() {
+  async authorize() {
     if (this.token === "") return;
 
-    console.log("sending auth request to api...");
+    const response = await fetch("http://localhost:3000/admin?token=" + this.token, {method: "POST"});
+
+    this.authorized = response.status === 200;
   }
 }).mount()
