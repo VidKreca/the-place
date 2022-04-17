@@ -1,17 +1,19 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { createApp } from 'https://unpkg.com/petite-vue?module';
 
-
+const CANVAS_SIZE_FACTOR = 5;
 
 createApp({
   // in seconds
-  timeout: undefined, 
+  timeout: undefined,
   timeoutDuration: undefined,
+  colors: [],
 
 
   mounted() {
     this.canvas = document.querySelector("#canvas");  // TODO - get ref to work instead of this
     this.context = this.canvas.getContext("2d");
+    this.context.imageSmoothingEnabled = false;
 
     // Config socket and all callbacks
     this.socket = io("http://localhost:3000");
@@ -38,20 +40,30 @@ createApp({
             [r, g, b] = currentImage[x][y];
           }
 
-          const index = (y * width * 4) + (x * 4);
-          this.image.data[index + 0] = r;
-          this.image.data[index + 1] = g;
-          this.image.data[index + 2] = b;
-          this.image.data[index + 3] = 255;
+          this.setPixelColor(x, y, { r, g, b });
         }
       }
 
-      this.draw();
+      this.drawImage();
     });
     this.socket.on("update", (msg) => {
       console.log("%cUPDATE: ", "color: blue", msg);
       this.updateCanvas(msg);
     });
+  },
+
+  /**
+   * @param {number} x original image x coordinate
+   * @param {number} y original image y coordinate
+   * @param {Array} color original image pixel color
+   */
+  setPixelColor(x, y, color) {
+    const { r, g, b } = color;
+    const index = (y * this.canvas.width * 4) + (x * 4);
+    this.image.data[index + 0] = r;
+    this.image.data[index + 1] = g;
+    this.image.data[index + 2] = b;
+    this.image.data[index + 3] = 255;
   },
 
   send(data) {
@@ -71,32 +83,25 @@ createApp({
       if (this.timeout <= 0) clearInterval(this.interval);
     }, 1000);
   },
-  
+
 
 
   /**
    * ====================== CANVAS ======================
    */
 
-  draw() {
+  drawImage() {
     this.context.putImageData(this.image, 0, 0);
   },
 
   updateCanvas(update) {
     if (!this.image) console.error("Have not received a 'initial' event yet.");
 
-    this.context.imageSmoothingEnabled = false;
+    const { x, y, color: [r, g, b] } = update;
 
-    const { x, y, color: [ r, g, b ] } = update;
+    this.setPixelColor(x, y, { r, g, b });
 
-    const pixelIndex = (y * this.canvas.width * 4) + (x * 4);
-
-    this.image.data[pixelIndex + 0] = r;
-    this.image.data[pixelIndex + 1] = g;
-    this.image.data[pixelIndex + 2] = b;
-    this.image.data[pixelIndex + 3] = 255;
-
-    this.draw();
+    this.drawImage();
   },
 
   onCanvasClick(e) {
@@ -105,7 +110,7 @@ createApp({
     const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height));
 
     const color = this.colors[this.selectedColorIndex];
-    const data = { x, y, color};
+    const data = { x, y, color };
 
     this.send(data);
   },

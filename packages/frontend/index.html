@@ -9,10 +9,10 @@
 </head>
 <body>
     <div class="container" v-scope @vue:mounted="mounted">
-        <canvas id="canvas" v-on:click="onCanvasClick"></canvas>
+        <canvas id="canvas" @click="onCanvasClick"></canvas>
         <div class="statusContainer">
             <span>{{timeout}}</span>
-            <div class="colors" v-if="colors">
+            <div class="colors" v-if="colors && colors.length > 0">
                 <button v-for="color, index in colors" @click="onColorClick(index)" :class="{selected: index === selectedColorIndex}" :style="{'background-color': getRgb(color)}"></button>
             </div>
         </div>
