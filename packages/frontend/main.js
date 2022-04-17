@@ -6,6 +6,15 @@ createApp({
   timeout: undefined,
   timeoutDuration: undefined,
   colors: [],
+  mouse: {
+    leftDown: false,
+    offsetX: 0,
+    offsetY: 0,
+    scroll: 0,
+    SPEED: 0.2,
+    MAX: 0.8,
+    MAX_SCROLL: 0.1
+  },
 
 
   mounted() {
@@ -94,7 +103,10 @@ createApp({
    */
 
   drawImage() {
-    this.context.putImageData(this.image, 0, 0);
+    requestAnimationFrame(() => {
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.context.putImageData(this.image, this.mouse.offsetX, this.mouse.offsetY);
+    });
   },
 
   updateCanvas(update) {
@@ -119,6 +131,34 @@ createApp({
     const data = { x, y, color };
 
     this.send(data);
+  },
+
+  onCanvasMouseMove(e) {
+    if (this.mouse.leftDown) {
+      const movementX = parseInt(e.movementX);
+      const movementY = parseInt(e.movementY);
+
+      this.mouse.offsetX += movementX * this.mouse.SPEED;
+      this.mouse.offsetY += movementY * this.mouse.SPEED;
+
+      this.mouse.offsetX = Math.min(this.mouse.offsetX, this.canvas.width * this.mouse.MAX);
+      this.mouse.offsetX = Math.max(this.mouse.offsetX, -(this.canvas.width * this.mouse.MAX));
+      this.mouse.offsetY = Math.min(this.mouse.offsetY, this.canvas.height * this.mouse.MAX);
+      this.mouse.offsetY = Math.max(this.mouse.offsetY, -(this.canvas.height * this.mouse.MAX));
+
+      this.drawImage();
+    }
+  },
+
+  onCanvasScroll(e) {
+    const delta = parseInt(e.deltaY);
+
+    this.mouse.scroll += delta / 1000;
+
+    this.mouse.scroll = Math.min(this.mouse.scroll, this.mouse.MAX_SCROLL);
+    this.mouse.scroll = Math.max(this.mouse.scroll, -this.mouse.MAX_SCROLL);
+
+    this.drawImage();
   },
 
 

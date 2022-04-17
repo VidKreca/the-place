@@ -14,7 +14,15 @@
             <h2>by <a href="https://vidkreca.github.io/">Vid Kreča</a></h2>
         </div>
 
-        <canvas id="canvas" @click="onCanvasClick"></canvas>
+        <canvas 
+            id="canvas" 
+            @click="onCanvasClick" 
+            @mousemove="onCanvasMouseMove" 
+            @mousedown="mouse.leftDown = true" 
+            @mouseup="mouse.leftDown = false" 
+            @mouseleave="mouse.leftDown = false" 
+            @wheel="onCanvasScroll">
+        </canvas>
 
         <div class="controls">
             <span >{{timeoutText()}}</span>
