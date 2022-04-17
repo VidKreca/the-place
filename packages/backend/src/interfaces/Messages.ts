@@ -1,13 +1,7 @@
 interface DrawMessage {
   x: number;
   y: number;
-  color: Color;
+  color: number[];
 }
 
-interface Color {
-  r: number;
-  g: number;
-  b: number;
-}
-
-export { DrawMessage, Color };
+export { DrawMessage };

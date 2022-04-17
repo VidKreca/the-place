@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Color, DrawMessage } from '../interfaces/Messages';
+import { DrawMessage } from '../interfaces/Messages';
 
 const DIMENSIONS = { width: 100, height: 100 };
-const COLORS = [
-  [0, 0, 0],
-  [255, 255, 255],
-  [255, 0, 0],
-  [0, 255, 0],
-  [0, 0, 255],
-];
 
 @Injectable()
 export class CanvasService {
-  private canvas: Color[][];
+  private canvas: number[][][];
   private history: DrawMessage[] = [];
+  private colors: number[][] = [
+    [0, 0, 0],
+    [255, 255, 255],
+    [255, 0, 0],
+    [0, 255, 0],
+    [0, 0, 255],
+  ];
 
   constructor() {
     // Create 2D array for colors
@@ -37,7 +37,7 @@ export class CanvasService {
 
   isValidColor(color): boolean {
     if (!Array.isArray(color) || color.length !== 3) return false;
-    if (!COLORS.find((x) => JSON.stringify(x) === JSON.stringify(color)))
+    if (!this.colors.find((x) => JSON.stringify(x) === JSON.stringify(color)))
       return false;
     return true;
   }
@@ -46,7 +46,7 @@ export class CanvasService {
     return {
       width: DIMENSIONS.width,
       height: DIMENSIONS.height,
-      colors: COLORS,
+      colors: this.colors,
     };
   }
 
