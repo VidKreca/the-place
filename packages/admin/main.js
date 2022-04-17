@@ -15,4 +15,4 @@ createApp({
 
     this.authorized = response.status === 200;
   }
-}).mount()
+}).mount();
