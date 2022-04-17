@@ -6,20 +6,19 @@ export interface Identifier {
   timestamp?: number;
 }
 
-const TIMEOUT = 3 * 1000; // Minimum delay between allowed draws in milliseconds
-
 @Injectable()
 export class TimeoutService {
   timeouts: Identifier[] = [];
+  timeout = 3 * 1000; // Minimum delay between allowed draws in milliseconds
 
   get timeoutDuration() {
-    return TIMEOUT / 1000;
+    return this.timeout / 1000;
   }
 
   isTimedOut(identifier: Identifier): boolean {
     // Remove expired timeouts
     this.timeouts = this.timeouts.filter(
-      (x) => x.timestamp && x.timestamp + TIMEOUT > Date.now(),
+      (x) => x.timestamp && x.timestamp + this.timeout > Date.now(),
     );
 
     const timeout = this.timeouts.find((x) => {
@@ -34,5 +33,9 @@ export class TimeoutService {
 
     identifier.timestamp = Date.now();
     this.timeouts.push(identifier);
+  }
+
+  setTimeout(newTimeout: number): void {
+    this.timeout = newTimeout;
   }
 }

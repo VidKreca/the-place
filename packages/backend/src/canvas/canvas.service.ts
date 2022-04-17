@@ -53,4 +53,12 @@ export class CanvasService {
   getCanvas() {
     return this.canvas;
   }
+
+  setColors(newColors: number[][]): void {
+    this.colors = newColors;
+  }
+
+  clearCanvas() {
+    console.log('%cClearing canvas is not implemented yet.', 'color: red');
+  }
 }

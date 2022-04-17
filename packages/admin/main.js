@@ -52,14 +52,18 @@ createApp({
   },
 
   async save() {
+    const body = {
+      ...JSON.parse(JSON.stringify(this.config)), actions: JSON.parse(JSON.stringify(this.actions))
+    }
+    console.log("%cModified config:", "color: gray", body);
+
     if (confirm("Are you sure you want to submit these changes?")) {
       const response = await fetch("http://localhost:3000/admin?token=" + this.token,{
         method: "PUT",
-        body: {
-          ...this.config, actions: this.actions
-        }
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
       });
-      alert("Saving was " + (response === 200 ? "SUCCESSFUL" : "UNSUCCESSFUL"));
+      alert("Saving was " + (response.status === 200 ? "SUCCESSFUL" : "UNSUCCESSFUL"));
     }
   },
 }).mount();

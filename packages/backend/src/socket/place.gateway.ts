@@ -20,14 +20,21 @@ export class PlaceGateway implements OnGatewayConnection {
     private timeoutService: TimeoutService,
   ) {}
 
-  handleConnection(@ConnectedSocket() socket) {
-    console.log('%cNew client connected', 'color: gray');
-
+  getInitialMessage() {
     const canvasConfig = this.canvasService.getConfig();
     const timeoutDuration = this.timeoutService.timeoutDuration;
     const image = this.canvasService.getCanvas();
-    const message = { ...canvasConfig, image, timeoutDuration };
-    socket.emit('initial', message);
+    return { ...canvasConfig, image, timeoutDuration };
+  }
+
+  handleConnection(@ConnectedSocket() socket) {
+    console.log('%cNew client connected', 'color: gray');
+
+    socket.emit('initial', this.getInitialMessage());
+  }
+
+  sendUpdatedConfig() {
+    this.server.emit('initial', this.getInitialMessage());
   }
 
   @SubscribeMessage('place')
