@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   font-family: 'Courier New', monospace;
+  user-select: none;
 }
 
 body {

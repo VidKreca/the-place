@@ -64,6 +64,11 @@ createApp({
     this.image.data[index + 3] = 255;
   },
 
+  getPixelColor(x, y) {
+    const index = (y * this.canvas.width * 4) + (x * 4);
+    return [this.image.data[index + 0], this.image.data[index + 1], this.image.data[index + 2]];
+  },
+
   send(data) {
     console.log("%cSending message...", "color: gray");
     this.socket.emit("place", data);
@@ -102,11 +107,15 @@ createApp({
   },
 
   onCanvasClick(e) {
+    if (this.timeout > 0) return;
+
     const rect = this.canvas.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / (rect.width / this.canvas.width));
     const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height));
 
     const color = this.colors[this.selectedColorIndex];
+    if (JSON.stringify(color) === JSON.stringify(this.getPixelColor(x, y))) return;   // Do not allow drawing over a pixel with the same color (wasting a draw)
+
     const data = { x, y, color };
 
     this.send(data);
