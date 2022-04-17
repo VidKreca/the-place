@@ -11,3 +11,9 @@ This is a copy of [Reddit's april fools mini game called 'The place'](https://en
   - [Nest.js](https://nestjs.com/)
   - [Socket.io](https://socket.io/)
  
+
+## Planned features
+- [ ] Saving the entire canvas (with all updates) in a database
+- [ ] System for updating canvas size, timeout length and colors live
+- [ ] Zooming and panning support for the canvas
+- [ ] Pixel highlight on mouse hover 
