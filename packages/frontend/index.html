@@ -12,7 +12,9 @@
         <canvas id="canvas" v-on:click="onCanvasClick"></canvas>
         <div class="statusContainer">
             <span>{{timeout}}</span>
-            <button v-on:click="setTimeout(5)">start timeout</button>
+            <div class="colors" v-if="colors">
+                <button v-for="color, index in colors" @click="onColorClick(index)" :class="{selected: index === selectedColorIndex}" :style="{'background-color': getRgb(color)}"></button>
+            </div>
         </div>
     </div>
 

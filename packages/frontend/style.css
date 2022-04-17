@@ -8,6 +8,17 @@ body {
   height: 100vh;
 }
 #canvas {
-  width: 50%;
+  height: 70vh;
   border: 1px solid black;
+}
+.colors {
+  padding-top: 1em;
+}
+.colors button {
+  border: none;
+  width: 3em;
+  height: 1.5em;
+}
+.colors button.selected {
+  transform: scale(1.5);
 }

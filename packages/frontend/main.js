@@ -20,10 +20,12 @@ createApp({
     this.socket.on("initial", (msg) => {
       console.log("%cReceived 'initial' message: ", "color: gray", msg);
 
-      const { width, height, image: currentImage, timeoutDuration } = msg;
+      const { width, height, image: currentImage, timeoutDuration, colors } = msg;
       this.canvas.width = width;
       this.canvas.height = height;
       this.timeoutDuration = timeoutDuration;
+      this.colors = colors;
+      this.selectedColorIndex = 0;
 
       this.image = this.context.createImageData(width, height);
 
@@ -102,10 +104,22 @@ createApp({
     const x = Math.floor((e.clientX - rect.left) / (rect.width / this.canvas.width));
     const y = Math.floor((e.clientY - rect.top) / (rect.height / this.canvas.height));
 
-    const randomColorValue = () => Math.random() * 255;
-    const randomColor = () => [ randomColorValue(), randomColorValue(), randomColorValue() ];
-    const data = { x, y, color: randomColor() };
+    const color = this.colors[this.selectedColorIndex];
+    const data = { x, y, color};
 
     this.send(data);
   },
+
+  /**
+   * ====================== UI ======================
+   */
+
+  getRgb(color) {
+    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`
+  },
+
+  onColorClick(index) {
+    this.selectedColorIndex = index;
+  }
+
 }).mount()
