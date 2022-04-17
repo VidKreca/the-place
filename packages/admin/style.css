@@ -32,7 +32,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 2em;
 }
 .form .colors label {
   display: grid;
@@ -50,6 +50,7 @@
 }
 .form .actions {
   display: flex;
+  align-items: center;
   gap: 1em;
 }
 .form .actions span {
@@ -61,6 +62,10 @@
 }
 .form .actions span.active {
   background: green;
+}
+
+.form #saveButton {
+  padding: 1em;
 }
 
 

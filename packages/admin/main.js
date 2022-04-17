@@ -11,7 +11,6 @@ createApp({
   },
   actions: {
     clear: false,
-    test: false,
   },
 
   get authStatusText() {

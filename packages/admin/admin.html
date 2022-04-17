@@ -44,10 +44,11 @@
       </div>
 
       <div class="actions">
+        <label>Actions</label>
         <span v-for="action in Object.keys(actions)" @click="toggleAction(action)" :class="{active: actions[action]}">{{action}}</span>
       </div>
 
-      <button @click="save()">Save</button>
+      <button id="saveButton" @click="save()">Save</button>
     </div>
   </div>
 
