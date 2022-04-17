@@ -1,8 +1,6 @@
 import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { createApp } from 'https://unpkg.com/petite-vue?module';
 
-const CANVAS_SIZE_FACTOR = 5;
-
 createApp({
   // in seconds
   timeout: undefined,
@@ -100,7 +98,6 @@ createApp({
     const { x, y, color: [r, g, b] } = update;
 
     this.setPixelColor(x, y, { r, g, b });
-
     this.drawImage();
   },
 
@@ -115,6 +112,8 @@ createApp({
     this.send(data);
   },
 
+
+
   /**
    * ====================== UI ======================
    */
@@ -125,6 +124,10 @@ createApp({
 
   onColorClick(index) {
     this.selectedColorIndex = index;
+  },
+
+  timeoutText() {
+    return (this.timeout === undefined || this.timeout <= 0) ? "Ready to draw" : `${this.timeout}s`;
   }
 
 }).mount()

@@ -9,9 +9,16 @@
 </head>
 <body>
     <div class="container" v-scope @vue:mounted="mounted">
+        <div class="header">
+            <h1>The place</h1>
+            <h2>by <a href="https://vidkreca.github.io/">Vid Kreča</a></h2>
+        </div>
+
         <canvas id="canvas" @click="onCanvasClick"></canvas>
-        <div class="statusContainer">
-            <span>{{timeout}}</span>
+
+        <div class="controls">
+            <span >{{timeoutText()}}</span>
+
             <div class="colors" v-if="colors && colors.length > 0">
                 <button v-for="color, index in colors" @click="onColorClick(index)" :class="{selected: index === selectedColorIndex}" :style="{'background-color': getRgb(color)}"></button>
             </div>
