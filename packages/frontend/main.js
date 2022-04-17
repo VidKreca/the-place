@@ -7,7 +7,7 @@ createApp({
   timeoutDuration: undefined,
   colors: [],
   mouse: {
-    leftDown: false,
+    panButtonDown: false,
     offsetX: 0,
     offsetY: 0,
     scroll: 1,
@@ -20,6 +20,7 @@ createApp({
 
   mounted() {
     this.canvas = document.querySelector("#canvas");  // TODO - get ref to work instead of this
+    this.canvas.addEventListener("contextmenu", e => e.preventDefault());
     this.context = this.canvas.getContext("2d");
     this.context.imageSmoothingEnabled = false;
 
@@ -140,7 +141,7 @@ createApp({
   },
 
   onCanvasMouseMove(e) {
-    if (this.mouse.leftDown) {
+    if (this.mouse.panButtonDown) {
       const movementX = parseInt(e.movementX);
       const movementY = parseInt(e.movementY);
 
@@ -154,6 +155,18 @@ createApp({
       this.mouse.offsetY = Math.max(this.mouse.offsetY, -(this.canvas.height * this.mouse.MAX));
 
       this.drawImage();
+    }
+  },
+
+  onCanvasMouseChange(e) {
+    if (e.type === "mouseleave") {
+      this.mouse.panButtonDown = false;
+    }
+    else if (e.type === "mousedown" && e.button !== 0) {
+      this.mouse.panButtonDown = true;
+    }
+    else if (e.type === "mouseup" && e.button !== 0) {
+      this.mouse.panButtonDown = false;
     }
   },
 

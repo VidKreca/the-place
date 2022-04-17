@@ -18,9 +18,9 @@
             id="canvas" 
             @click="onCanvasClick" 
             @mousemove="onCanvasMouseMove" 
-            @mousedown="mouse.leftDown = true" 
-            @mouseup="mouse.leftDown = false" 
-            @mouseleave="mouse.leftDown = false" 
+            @mousedown="onCanvasMouseChange" 
+            @mouseup="onCanvasMouseChange" 
+            @mouseleave="onCanvasMouseChange" 
             @wheel="onCanvasScroll">
         </canvas>
 
