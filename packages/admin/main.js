@@ -22,6 +22,8 @@ createApp({
     const response = await fetch("http://localhost:3000/admin?token=" + this.token);
     this.authorized = response.status === 200;
     this.config = await response.json();
+
+    this.config.timeoutDuration = Math.round(this.config.timeoutDuration);
   },
 
   onColorClick(index) {
