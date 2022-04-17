@@ -10,10 +10,12 @@
 <body>
   
   <div class="container" v-scope>
+    <h1>The place - admin panel</h1>
+
     <div class="auth">
-      <input type="text" v-model="token" placeholder="Admin token" :disabled="authorized">
-      <button @click="authorize">Authorize</button>
       <div id="authStatus" :class="{authed: authorized}"><span></span>{{authStatusText}}</div>
+      <input type="text" v-model="token" placeholder="Admin token" :disabled="authorized">
+      <button @click="authorize" :disabled="authorized">Authorize</button>
     </div>
 
     <div class="form" v-if="authorized && config">
@@ -30,7 +32,9 @@
       </div>
 
       <div class="colors">
+        <label>Colors</label>
         <span v-for="color, index in config.colors" @click="onColorClick(index)" :style="{'background-color': getRgb(color)}"></span>
+
         <div class="colorForm" :style="{'background-color': getRgb([color.r, color.g, color.b])}">
           <input type="number" placeholder="red" v-model="color.r" max="255" min="0">
           <input type="number" placeholder="green" v-model="color.g" max="255" min="0">
@@ -40,10 +44,7 @@
       </div>
 
       <div class="actions">
-        <button @click="toggleAction('clear')">Clear canvas</button>
-        <div>
-          <span v-for="action in actions">{{action}}</span>
-        </div>
+        <span v-for="action in Object.keys(actions)" @click="toggleAction(action)" :class="{active: actions[action]}">{{action}}</span>
       </div>
 
       <button @click="save()">Save</button>

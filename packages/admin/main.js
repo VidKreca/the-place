@@ -9,7 +9,10 @@ createApp({
     g: 0,
     b: 0,
   },
-  actions: [],
+  actions: {
+    clear: false,
+    test: false,
+  },
 
   get authStatusText() {
     return this.authorized ? "Authorized" : "Unauthorized";
@@ -44,17 +47,15 @@ createApp({
   },
 
   toggleAction(action) {
-    if (this.actions.includes(action)) {
-      this.actions = this.actions.filter(x => x !== action);
-    } else {
-      this.actions.push(action);
-    }
+    if (!Object.keys(this.actions).includes(action)) return;
+    this.actions[action] = !this.actions[action];
   },
 
   async save() {
     const body = {
-      ...JSON.parse(JSON.stringify(this.config)), actions: JSON.parse(JSON.stringify(this.actions))
-    }
+      ...JSON.parse(JSON.stringify(this.config)), 
+      actions: Object.keys(this.actions).filter(action => this.actions[action])
+    };
     console.log("%cModified config:", "color: gray", body);
 
     if (confirm("Are you sure you want to submit these changes?")) {
@@ -64,6 +65,9 @@ createApp({
         body: JSON.stringify(body)
       });
       alert("Saving was " + (response.status === 200 ? "SUCCESSFUL" : "UNSUCCESSFUL"));
+
+      // Disable all actions
+      for (const action of Object.keys(this.actions)) this.actions[action] = false;
     }
   },
 }).mount();

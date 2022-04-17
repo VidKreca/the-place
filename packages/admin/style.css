@@ -4,15 +4,18 @@
 }
 
 .container {
-  
+  width: 50vw;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
 }
 
-.auth {
-
-}
 .auth #authStatus {
   display: flex;
   gap: .3em;
+  margin-bottom: .2em;
 }
 .auth #authStatus span {
   display: inline-block;
@@ -26,9 +29,44 @@
 }
 
 
-.colors span {
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.form .colors label {
+  display: grid;
+}
+.form .colors span {
   display: inline-block;
   width: 2em;
   height: 2em;
   border: 1px solid black;
+  cursor: pointer;
+}
+.form .colors .colorForm {
+  display: flex;
+  height: 3em;
+}
+.form .actions {
+  display: flex;
+  gap: 1em;
+}
+.form .actions span {
+  display: inline-block;
+  background-color: red;
+  padding: .5em;
+  cursor: pointer;
+  user-select: none;
+}
+.form .actions span.active {
+  background: green;
+}
+
+
+
+
+button {
+  cursor: pointer;
+  user-select: none;
 }
