@@ -58,8 +58,9 @@ body {
   align-items: center;
 }
 
-.colors {
-  padding-top: 1em;
+#timeoutText {
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .colors button {

@@ -25,7 +25,7 @@
         </canvas>
 
         <div class="controls">
-            <span >{{timeoutText()}}</span>
+            <span id="timeoutText">{{timeoutText()}}</span>
 
             <div class="colors" v-if="colors && colors.length > 0">
                 <button v-for="color, index in colors" @click="onColorClick(index)" :class="{selected: index === selectedColorIndex}" :style="{'background-color': getRgb(color)}"></button>
