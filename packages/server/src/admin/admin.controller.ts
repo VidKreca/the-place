@@ -1,15 +1,11 @@
 import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { ConfigService } from '../config/config.service';
-import { PlaceGateway } from '../socket/place.gateway';
 import { AdminGuard } from './admin.guard';
 
 @Controller('admin')
 @UseGuards(AdminGuard)
 export class AdminController {
-  constructor(
-    private configService: ConfigService,
-    private placeGateway: PlaceGateway,
-  ) {}
+  constructor(private configService: ConfigService) {}
 
   @Get()
   getConfig() {
@@ -25,7 +21,5 @@ export class AdminController {
       timeoutDuration: body.timeoutDuration,
       actions: body.actions,
     });
-
-    this.placeGateway.sendUpdatedConfig();
   }
 }

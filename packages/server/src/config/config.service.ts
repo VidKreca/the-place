@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CanvasService } from '../canvas/canvas.service';
 import { Config } from '../interfaces/Config';
 import { TimeoutService } from '../timeout/timeout.service';
+import { PlaceGateway } from '../socket/place.gateway';
 
 @Injectable()
 export class ConfigService {
   constructor(
     private canvasService: CanvasService,
     private timeoutService: TimeoutService,
+    private placeGateway: PlaceGateway,
   ) {}
 
   getConfig() {
@@ -37,5 +39,7 @@ export class ConfigService {
         this.canvasService.clearCanvas();
       }
     }
+
+    this.placeGateway.sendUpdatedConfig();
   }
 }
