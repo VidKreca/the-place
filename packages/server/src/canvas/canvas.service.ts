@@ -1,5 +1,9 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { DrawMessage } from '../interfaces/Messages';
+import { Canvas, CanvasDocument } from './canvas.schema';
+import { TimeoutService } from '../timeout/timeout.service';
 
 @Injectable()
 export class CanvasService {
@@ -14,7 +18,10 @@ export class CanvasService {
     [0, 0, 255],
   ];
 
-  constructor() {
+  constructor(
+    @InjectModel(Canvas.name) private canvasModel: Model<CanvasDocument>,
+    private timeoutService: TimeoutService,
+  ) {
     // Create 2D array for colors
     this.generateCanvas();
   }
@@ -53,6 +60,13 @@ export class CanvasService {
     };
   }
 
+  getConfigForBackup() {
+    return {
+      ...this.getConfig(),
+      timeoutDuration: this.timeoutService.timeoutDuration,
+    };
+  }
+
   getCanvas() {
     return this.canvas;
   }
@@ -63,5 +77,26 @@ export class CanvasService {
 
   clearCanvas() {
     this.generateCanvas();
+  }
+
+  /**
+   * Save current canvas and history in the database.
+   */
+  async saveCanvas() {
+    console.log('Saving canvas...');
+
+    const createdCanvasBackup = new this.canvasModel({
+      timestamp: Date.now(),
+      image: this.canvas,
+      history: this.history,
+      config: this.getConfigForBackup(),
+    });
+  }
+
+  /**
+   * Load latest canvas and history from database.
+   */
+  loadCanvas() {
+    console.log('Loading canvas...');
   }
 }

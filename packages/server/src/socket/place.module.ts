@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CanvasService } from '../canvas/canvas.service';
+import { CanvasModule } from '../canvas/canvas.module';
 import { TimeoutService } from '../timeout/timeout.service';
 import { PlaceGateway } from './place.gateway';
 
 @Module({
-  providers: [PlaceGateway, CanvasService, TimeoutService],
+  imports: [CanvasModule],
+  providers: [PlaceGateway, TimeoutService],
 })
 export class PlaceModule {}
