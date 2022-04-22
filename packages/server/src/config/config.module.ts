@@ -1,12 +1,16 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CanvasModule } from '../canvas/canvas.module';
-import { TimeoutService } from '../timeout/timeout.service';
 import { ConfigService } from './config.service';
-import { PlaceGateway } from '../socket/place.gateway';
+import { TimeoutModule } from '../timeout/timeout.module';
+import { PlaceModule } from '../socket/place.module';
 
 @Module({
-  imports: [forwardRef(() => CanvasModule)],
-  providers: [ConfigService, TimeoutService, PlaceGateway],
+  imports: [
+    forwardRef(() => CanvasModule),
+    forwardRef(() => PlaceModule),
+    forwardRef(() => TimeoutModule),
+  ],
+  providers: [ConfigService],
   exports: [ConfigService],
 })
 export class ConfigModule {}
