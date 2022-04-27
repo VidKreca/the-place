@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { DrawMessage } from '../interfaces/Messages';
+import { ConfigService } from '../config/config.service';
 
 @Injectable()
 export class CanvasService {
@@ -14,7 +15,10 @@ export class CanvasService {
     [0, 0, 255],
   ];
 
-  constructor() {
+  constructor(
+    @Inject(forwardRef(() => ConfigService))
+    private configService: ConfigService,
+  ) {
     // Create 2D array for colors
     this.generateCanvas();
   }
@@ -53,11 +57,23 @@ export class CanvasService {
     };
   }
 
+  getHistory() {
+    return this.history;
+  }
+
+  setHistory(value: DrawMessage[]) {
+    this.history = value;
+  }
+
   getCanvas() {
     return this.canvas;
   }
 
-  setColors(newColors: number[][]): void {
+  setCanvas(value: number[][][]) {
+    this.canvas = value;
+  }
+
+  setColors(newColors: number[][]) {
     this.colors = newColors;
   }
 

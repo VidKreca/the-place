@@ -1,3 +1,4 @@
+import { forwardRef, Inject } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -16,6 +17,7 @@ export class PlaceGateway implements OnGatewayConnection {
   server: any;
 
   constructor(
+    @Inject(forwardRef(() => CanvasService))
     private canvasService: CanvasService,
     private timeoutService: TimeoutService,
   ) {}
