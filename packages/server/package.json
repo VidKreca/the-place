@@ -1,9 +1,8 @@
 {
-  "name": "backend",
+  "name": "server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
+  "description": "NestJS backend server for the-place",
+  "author": "Vid Kreča",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",

@@ -1,0 +1,10 @@
+{
+  "name": "admin",
+  "version": "0.0.1",
+  "description": "Admin client for the-place",
+  "author": "Vid Kreča",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start:dev": "live-server --port=8081 --entry-file=admin.html"
+  }
+}
