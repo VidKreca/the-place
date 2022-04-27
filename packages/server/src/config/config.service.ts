@@ -6,9 +6,12 @@ import { PlaceGateway } from '../socket/place.gateway';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ConfigDocument, ConfigSchemaObject } from './config.schema';
+import config from '../config.json';
 
 @Injectable()
 export class ConfigService {
+  lastChangesCount = 0;
+
   constructor(
     @InjectModel(ConfigSchemaObject.name)
     private canvasModel: Model<ConfigDocument>,
@@ -18,6 +21,15 @@ export class ConfigService {
     private placeGateway: PlaceGateway,
   ) {
     this.loadFromDatabase();
+
+    setInterval(() => {
+      if (
+        this.canvasService.getHistory().length - this.lastChangesCount >
+        config.minimum_changes_between_db_saves
+      ) {
+        this.saveToDatabase();
+      }
+    }, config.seconds_between_db_save * 1000);
   }
 
   getConfig() {
@@ -64,6 +76,8 @@ export class ConfigService {
       config: this.getConfig(),
     });
     await createdCanvasBackup.save();
+
+    this.lastChangesCount = createdCanvasBackup.toObject().history.length;
   }
 
   /**
@@ -78,9 +92,18 @@ export class ConfigService {
       .exec();
 
     if (newestSave) {
-      console.log(newestSave);
+      console.log(
+        `Loaded save from timestamp: ${newestSave.toObject().timestamp}`,
+      );
+
+      const save = newestSave.toObject();
+
+      this.lastChangesCount = save.history.length;
+      this.setConfig(save.config);
+      this.canvasService.setHistory(save.history);
+      this.canvasService.setCanvas(save.image);
     } else {
-      console.log('no save found');
+      console.log('No save found in database.');
     }
   }
 }

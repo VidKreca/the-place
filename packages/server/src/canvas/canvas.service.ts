@@ -39,8 +39,6 @@ export class CanvasService {
     this.canvas[data.x][data.y] = data.color;
     this.history.push(data);
 
-    this.configService.saveToDatabase();
-
     return true;
   }
 
@@ -63,11 +61,19 @@ export class CanvasService {
     return this.history;
   }
 
+  setHistory(value: DrawMessage[]) {
+    this.history = value;
+  }
+
   getCanvas() {
     return this.canvas;
   }
 
-  setColors(newColors: number[][]): void {
+  setCanvas(value: number[][][]) {
+    this.canvas = value;
+  }
+
+  setColors(newColors: number[][]) {
     this.colors = newColors;
   }
 
