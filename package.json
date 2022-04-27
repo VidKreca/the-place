@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "install": "lerna bootstrap",
+    "build": "lerna run build",
+    "clean": "lerna clean",
+    "start:dev": "lerna run start:dev --stream"
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "live-server": "^1.2.2"
+  }
+}

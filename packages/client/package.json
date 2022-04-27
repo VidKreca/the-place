@@ -1,0 +1,10 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "description": "Frontend client for the-place",
+  "author": "Vid Kreča",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start:dev": "live-server --port=8080 ."
+  }
+}
