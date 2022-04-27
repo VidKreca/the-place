@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { DrawMessage } from '../interfaces/Messages';
 import { Document } from 'mongoose';
-import { Config } from '../interfaces/Config';
+import { Config as IConfig } from '../interfaces/Config';
 
-export type CanvasDocument = Canvas & Document;
+export type ConfigDocument = ConfigSchemaObject & Document;
 
 @Schema()
-export class Canvas {
+export class ConfigSchemaObject {
   @Prop({ required: true })
   timestamp: number;
 
@@ -17,7 +17,7 @@ export class Canvas {
   history: DrawMessage[];
 
   @Prop({ type: Object })
-  config: Config;
+  config: IConfig;
 }
 
-export const CanvasSchema = SchemaFactory.createForClass(Canvas);
+export const ConfigSchema = SchemaFactory.createForClass(ConfigSchemaObject);

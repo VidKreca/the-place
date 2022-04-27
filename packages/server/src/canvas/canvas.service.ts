@@ -1,8 +1,5 @@
-import { Model } from 'mongoose';
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { DrawMessage } from '../interfaces/Messages';
-import { Canvas, CanvasDocument } from './canvas.schema';
 import { ConfigService } from '../config/config.service';
 
 @Injectable()
@@ -19,8 +16,6 @@ export class CanvasService {
   ];
 
   constructor(
-    @InjectModel(Canvas.name)
-    private canvasModel: Model<CanvasDocument>,
     @Inject(forwardRef(() => ConfigService))
     private configService: ConfigService,
   ) {
@@ -44,6 +39,8 @@ export class CanvasService {
     this.canvas[data.x][data.y] = data.color;
     this.history.push(data);
 
+    this.configService.saveToDatabase();
+
     return true;
   }
 
@@ -62,6 +59,10 @@ export class CanvasService {
     };
   }
 
+  getHistory() {
+    return this.history;
+  }
+
   getCanvas() {
     return this.canvas;
   }
@@ -72,26 +73,5 @@ export class CanvasService {
 
   clearCanvas() {
     this.generateCanvas();
-  }
-
-  /**
-   * Save current canvas and history in the database.
-   */
-  async saveCanvas() {
-    console.log('Saving canvas...');
-
-    const createdCanvasBackup = new this.canvasModel({
-      timestamp: Date.now(),
-      image: this.canvas,
-      history: this.history,
-      config: this.configService.getConfig(),
-    });
-  }
-
-  /**
-   * Load latest canvas and history from database.
-   */
-  loadCanvas() {
-    console.log('Loading canvas...');
   }
 }
