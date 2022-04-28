@@ -34,7 +34,7 @@ export class ConfigService {
 
   getConfig() {
     const canvasConfig = this.canvasService.getConfig();
-    const timeoutDuration = this.timeoutService.timeoutDuration;
+    const timeoutDuration = this.timeoutService.timeout;
     return { ...canvasConfig, timeoutDuration };
   }
 
@@ -49,7 +49,7 @@ export class ConfigService {
 
     // Timeout
     if (config.timeoutDuration) {
-      this.timeoutService.setTimeout(config.timeoutDuration);
+      this.timeoutService.timeout = config.timeoutDuration;
     }
 
     // Actions

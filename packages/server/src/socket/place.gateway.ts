@@ -24,7 +24,7 @@ export class PlaceGateway implements OnGatewayConnection {
 
   getInitialMessage() {
     const canvasConfig = this.canvasService.getConfig();
-    const timeoutDuration = this.timeoutService.timeoutDuration;
+    const timeoutDuration = this.timeoutService.timeout;
     const image = this.canvasService.getCanvas();
     return { ...canvasConfig, image, timeoutDuration };
   }
