@@ -2,8 +2,7 @@ import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
 import { createApp } from 'https://unpkg.com/petite-vue?module';
 
 createApp({
-  // in seconds
-  timeout: undefined,
+  timeout: undefined, // in seconds
   timeoutDuration: undefined,
   colors: [],
   mouse: {
@@ -26,8 +25,14 @@ createApp({
 
     // Config socket and all callbacks
     this.socket = io("http://localhost:3000");
-    this.socket.on("connect", () => console.log("%cConnected", "color: green"));
-    this.socket.on("disconnect", () => console.log("%cDisconnected", "color: red"));
+    this.socket.on("connect", () => {
+      console.log("%cConnected", "color: green");
+      document.querySelector(".container").classList.remove("loading");
+    });
+    this.socket.on("disconnect", () => {
+      console.log("%cDisconnected", "color: red");
+      document.querySelector(".container").classList.add("loading");
+    });
     this.socket.on("initial", (msg) => {
       console.log("%cReceived 'initial' message: ", "color: gray", msg);
 
@@ -85,7 +90,7 @@ createApp({
     this.socket.emit("place", data);
 
     if ((!this.timeout || this.timeout <= 0) && this.timeoutDuration) {
-      this.setTimeout(this.timeoutDuration);
+      this.setTimeout(this.timeoutDuration * 1000);
     }
   },
 

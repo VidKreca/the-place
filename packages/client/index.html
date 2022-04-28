@@ -8,11 +8,13 @@
     <title>the-place</title>
 </head>
 <body>
-    <div class="container" v-scope @vue:mounted="mounted">
+    <div class="container loading" v-scope @vue:mounted="mounted">
         <div class="header">
             <h1>The place</h1>
             <h2>by <a href="https://vidkreca.github.io/">Vid Kreča</a></h2>
         </div>
+
+        <div class="loader"></div>
 
         <canvas 
             id="canvas" 
@@ -22,6 +24,7 @@
             @mouseup="onCanvasMouseChange" 
             @mouseleave="onCanvasMouseChange" 
             @wheel="onCanvasScroll">
+            <div class="loader"></div>
         </canvas>
 
         <div class="controls">
