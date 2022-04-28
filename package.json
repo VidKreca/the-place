@@ -5,7 +5,10 @@
     "install": "lerna bootstrap",
     "build": "lerna run build",
     "clean": "lerna clean",
-    "start:dev": "lerna run start:dev --stream"
+    "start:dev": "lerna run start:dev --stream",
+    "start:server": "npm run --prefix packages/server/ start:dev",
+    "start:client": "npm run --prefix packages/client/ start:dev",
+    "start:admin": "npm run --prefix packages/admin/ start:dev"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
