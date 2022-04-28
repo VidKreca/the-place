@@ -4,12 +4,14 @@
 This is a copy of [Reddit's april fools mini game called 'The place'](https://en.wikipedia.org/wiki/Place_(Reddit)) on the [/r/place](https://www.reddit.com/r/place/) subreddit.
 
 ## Tech stack
-- Frontend:
+- Client:
   - [Petite-vue](https://github.com/vuejs/petite-vue)
   - [Socket.io](https://socket.io/)
-- Backend:
+- Server:
   - [Nest.js](https://nestjs.com/)
   - [Socket.io](https://socket.io/)
+- Admin panel:
+  - [Petite-vue](https://github.com/vuejs/petite-vue)
  
 
 ## Planned features
